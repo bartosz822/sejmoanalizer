@@ -4,11 +4,8 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UncheckedIOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Comparator;
-import java.util.HashMap;
 
 /**
  * Created by bartek on 12/12/16.

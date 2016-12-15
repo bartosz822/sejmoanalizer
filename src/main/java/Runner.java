@@ -1,6 +1,5 @@
 import org.apache.commons.cli.*;
 import org.json.JSONException;
-
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.UnknownHostException;

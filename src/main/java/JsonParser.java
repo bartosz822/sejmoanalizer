@@ -1,13 +1,9 @@
 import org.apache.commons.io.IOUtils;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
@@ -88,7 +84,7 @@ class JsonParser {
         return new ArrayList<>(deputyByName.values());
     }
 
-    //throws NumberFormatException
+    //throws NumberFormatException if link doesn't end with nuber but it's kind of impossible pasend on the structure of the json string
     private static int getLastPage(String link) {
         int i = link.length() - 1;
         StringBuilder number = new StringBuilder();
