@@ -2,6 +2,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 import static org.junit.Assert.*;
 
@@ -12,27 +13,28 @@ public class DeputiesTest {
 
     private static Deputies deputies;
 
+
     static {
         try {
-            deputies = new Deputies(JsonParser.getIDs(), Deputies.DeputiesOptions.WithTripsAndSpends);
-        } catch (IOException e) {
-            e.printStackTrace();
+            deputies = new Deputies(JsonParser.getIDs("https://api-v3.mojepanstwo.pl/dane/poslowie.json?conditions[poslowie.kadencja]=8"), Deputies.DeputiesOptions.WithTripsAndSpends);
+        } catch (IOException | InterruptedException | ExecutionException e ) {
+            e.getMessage();
         }
     }
 
        @Test
     public void getAvgSpends() throws Exception {
-        assertEquals(153386.6574, deputies.getAvgSpends(), 0.01);
+        assertEquals(149331.12, deputies.getAvgSpends(), 0.01);
     }
 
     @Test
     public void getMostTrip() throws Exception {
-        assertEquals("Witold Waszczykowski", deputies.getMostTrip());
+        assertEquals("Jan Dziedziczak", deputies.getMostTrip());
     }
 
     @Test
     public void getLongestTrip() throws Exception {
-        assertEquals("Jan Krzysztof Ardanowski", deputies.getLongestTrip());
+        assertEquals("Killion Munyama", deputies.getLongestTrip());
     }
 
     @Test
@@ -42,7 +44,11 @@ public class DeputiesTest {
 
     @Test
     public void getVisitedItaly() throws Exception {
-        assertEquals("[Joanna Fabisiak, Rafał Grupiński, Andrzej Czerwiński]", deputies.getVisitedItaly());
+        String italy = "[Michał Jaros, Robert Tyszkiewicz, Roman Jacek Kosecki, Sławomir Neumann, Grzegorz Raniewicz, "
+                + "Jacek Falfus, Cezary Tomczyk, Rafał Grupiński, Marek Matuszewski, Andrzej Czerwiński, Jan Dziedziczak, Ewa Kopacz, Cezary "
+                + "Grabarczyk, Adam Abramowicz, Stefan Niesiołowski, Anna Nemś, Grzegorz Schetyna, Antoni Mężydło, Jakub Rutnicki, Krystyna "
+                + "Skowrońska, Wojciech Ziemniak, Marek Rząsa, Joanna Fabisiak, Agnieszka Pomaska, Ireneusz Raś]";
+        assertEquals(italy, deputies.getVisitedItaly());
     }
 
 }

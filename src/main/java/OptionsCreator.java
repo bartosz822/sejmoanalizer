@@ -4,7 +4,7 @@ import org.apache.commons.cli.Options;
 /**
  * Created by bartek on 12/12/16.
  */
-public class OptionsCreator {
+class OptionsCreator {
 
     static Options create(){
 
@@ -22,12 +22,14 @@ public class OptionsCreator {
 
         options.addOption(wydatkiSUM);
         options.addOption(wydatki_naprawy);
+        options.addOption("kadencja", true, "opcja wyboru kadencji");
         options.addOption("wydatkiAVG", false, "opcja odzytu średniej wartości sumy wydatków wszystkich posłów");
         options.addOption("najwiecejpod", false, "opcja odzytu posła/posłanki, który wykonał najwięcej podróży zagranicznych\n");
         options.addOption("najdluzej", false, "opcja odzytu posła/posłanki, który najdłużej przebywał za granicą");
         options.addOption("najdrozsza", false, "opcja odzytu posła/posłanki, który odbył najdroższą podróż zagraniczną");
         options.addOption("wlochy", false, "opcja odzytu listy wszystkich posłów, którzy odwiedzili Włochy\n");
         options.addOption("all", false, "opcja odzytu wszystkich opcji bezparametrowych");
+
 
         return options;
     }
