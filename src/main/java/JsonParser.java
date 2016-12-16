@@ -16,7 +16,6 @@ import java.util.stream.Stream;
 class JsonParser {
 
     private static HashMap<String, Integer> deputyByName = new HashMap<>();
-    private static List<Integer> IDs = new ArrayList<>();
 
 
     private static void parsemain(String Url) throws IOException, ExecutionException, InterruptedException {
@@ -27,13 +26,7 @@ class JsonParser {
         ) {
 
             JSONObject jsonObject = new JSONObject(IOUtils.toString(in, "UTF-8"));
-            for (Object o : jsonObject.getJSONArray("Dataobject")) {
-                JSONObject jsonO = (JSONObject) o;
-                int id = jsonO.getInt("id");
-                String name = jsonO.getJSONObject("data").getString("ludzie.nazwa");
-                IDs.add(jsonO.getInt("id"));
-                deputyByName.put(name, id);
-            }
+            putNameAndIdIntoMap(jsonObject, deputyByName);
 
             Optional<String> linkToLast = Optional.ofNullable(getLinkToLast(jsonObject));
             if (linkToLast.isPresent()) {
@@ -66,21 +59,26 @@ class JsonParser {
                      new URL(Url).openStream()
         ) {
             JSONObject jsonObject = new JSONObject(IOUtils.toString(in, "UTF-8"));
-            for (Object o : jsonObject.getJSONArray("Dataobject")) {
-                JSONObject jsonO = (JSONObject) o;
-                int id = jsonO.getInt("id");
-                String name = jsonO.getJSONObject("data").getString("ludzie.nazwa");
-                deputies.put(name, id);
-            }
+
+            putNameAndIdIntoMap(jsonObject, deputies);
+
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
         return deputies.entrySet().stream();
     }
 
+    private static void putNameAndIdIntoMap(JSONObject jsonObject, HashMap<String, Integer> deputies){
+        for (Object o : jsonObject.getJSONArray("Dataobject")) {
+            JSONObject jsonO = (JSONObject) o;
+            int id = jsonO.getInt("id");
+            String name = jsonO.getJSONObject("data").getString("ludzie.nazwa");
+            deputies.put(name, id);
+        }
+    }
 
     static List<Integer> getIDs(String Url) throws IOException, ExecutionException, InterruptedException {
-        if (IDs.isEmpty()) parsemain(Url);
+        if (deputyByName.isEmpty()) parsemain(Url);
         return new ArrayList<>(deputyByName.values());
     }
 

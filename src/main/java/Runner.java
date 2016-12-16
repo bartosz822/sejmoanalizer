@@ -6,18 +6,20 @@ import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+
 /**
  * Created by bartek on 12/12/16.
  */
+
 public class Runner {
 
-// TODO config file
+// TODO config file with links etc ?
 
 
     public static void main(String[] args) {
-        long start = System.currentTimeMillis();
+//        long start = System.currentTimeMillis();
         System.out.println(run(args));
-        System.out.println("\n\nczas:" + (System.currentTimeMillis() - start));
+//        System.out.println("\n\nczas:" + (System.currentTimeMillis() - start));
     }
 
     private static Deputies.DeputiesOptions parseOption = Deputies.DeputiesOptions.any;
@@ -42,7 +44,6 @@ public class Runner {
 
         try {
             CommandLine cmd = parser.parse(options, args);
-
 
             if (cmd.getOptions().length == 0) {
                 throw new IllegalArgumentException("Nie podano argumentów");
@@ -75,7 +76,12 @@ public class Runner {
                 String name = String.join(" ", (CharSequence[]) o.getValues());
                 if (deputyByName.containsKey(name)) {
                     int id = deputyByName.get(name);
-                    res.append(DeputyBuilder.buildWithSpends(id).getSumOfSpends());
+                    res.append("Wydatki posła: ")
+                            .append(name).append(" ")
+                            .append(DeputyBuilder
+                                    .buildWithSpends(id)
+                                    .getSumOfSpends())
+                            .append("\n");
                 } else throw new IllegalArgumentException("Taki poseł nie istnieje");
                 break;
             }
@@ -83,7 +89,12 @@ public class Runner {
                 String name = String.join(" ", (CharSequence[]) o.getValues());
                 if (deputyByName.containsKey(name)) {
                     int id = deputyByName.get(name);
-                    res.append(DeputyBuilder.buildWithSpends(id).getSpendsOnRepairs());
+                    res.append("Wydatki na naprawy posła: ")
+                            .append(name)
+                            .append(DeputyBuilder
+                                    .buildWithSpends(id)
+                                    .getSpendsOnRepairs())
+                            .append(" \n");
                 } else throw new IllegalArgumentException("Taki poseł nie istnieje");
                 break;
             }
