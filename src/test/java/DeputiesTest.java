@@ -1,10 +1,9 @@
-import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by bartek on 12/12/16.

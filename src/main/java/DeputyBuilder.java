@@ -6,7 +6,7 @@ import java.io.UncheckedIOException;
  */
 public class DeputyBuilder {
 
-    private static String url = "https://api-v3.mojepanstwo.pl/dane/poslowie/";
+    private static final String url = "https://api-v3.mojepanstwo.pl/dane/poslowie/";
 
     static Deputy buildWithSpends(int ID) {
         try {

@@ -6,6 +6,9 @@ import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.net.URL;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -15,7 +18,7 @@ import java.util.stream.Stream;
  */
 class JsonParser {
 
-    private static HashMap<String, Integer> deputyByName = new HashMap<>();
+    private static final Map<String, Integer> deputyByName = new ConcurrentHashMap<>();
 
 
     private static void parsemain(String Url) throws IOException, ExecutionException, InterruptedException {
@@ -68,7 +71,7 @@ class JsonParser {
         return deputies.entrySet().stream();
     }
 
-    private static void putNameAndIdIntoMap(JSONObject jsonObject, HashMap<String, Integer> deputies){
+    private static void putNameAndIdIntoMap(JSONObject jsonObject, Map<String, Integer> deputies){
         for (Object o : jsonObject.getJSONArray("Dataobject")) {
             JSONObject jsonO = (JSONObject) o;
             int id = jsonO.getInt("id");
@@ -79,7 +82,7 @@ class JsonParser {
 
     static List<Integer> getIDs(String Url) throws IOException, ExecutionException, InterruptedException {
         if (deputyByName.isEmpty()) parsemain(Url);
-        return new ArrayList<>(deputyByName.values());
+        return new CopyOnWriteArrayList<>(deputyByName.values());
     }
 
     //throws NumberFormatException if link doesn't end with nuber but it's kind of impossible pasend on the structure of the json string
@@ -94,7 +97,7 @@ class JsonParser {
     }
 
 
-    static HashMap<String, Integer> getDeputyByName(String Url) throws IOException, ExecutionException, InterruptedException {
+    static Map<String, Integer> getDeputyByName(String Url) throws IOException, ExecutionException, InterruptedException {
         if (deputyByName.isEmpty()) parsemain(Url);
         return deputyByName;
     }

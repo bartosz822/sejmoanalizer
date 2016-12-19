@@ -1,9 +1,12 @@
+import com.aol.cyclops.control.LazyReact;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ForkJoinPool;
 import java.util.stream.Collectors;
 
 
@@ -16,12 +19,15 @@ class Deputies {
 
     Deputies(List<Integer> IDs, DeputiesOptions o) throws IOException, ExecutionException, InterruptedException {
 
+        LazyReact streamBuilder = new LazyReact(new ForkJoinPool(64));
+
         if (o.equals(DeputiesOptions.WithSpends))
             this.deputies = IDs.parallelStream().map(DeputyBuilder::buildWithSpends).collect(Collectors.toList());
         else if (o.equals(DeputiesOptions.WithTrips))
             this.deputies = IDs.parallelStream().map(DeputyBuilder::buildWithTrips).collect(Collectors.toList());
         else {
-            this.deputies = IDs.parallelStream().parallel().map(DeputyBuilder::buildWithTripsAndSpends).collect(Collectors.toList());
+//            this.deputies = IDs.parallelStream().parallel().map(DeputyBuilder::buildWithTripsAndSpends).collect(Collectors.toList());
+              this.deputies=streamBuilder.from(IDs).map(DeputyBuilder::buildWithTripsAndSpends).collect(Collectors.toList());
         }
 
     }
