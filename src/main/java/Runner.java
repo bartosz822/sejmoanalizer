@@ -14,12 +14,12 @@ import java.util.concurrent.ExecutionException;
 public class Runner {
 
 // TODO config file with links etc ?
-
+// TODO funkcja has w objectach 
 
     public static void main(String[] args) {
-//        long start = System.currentTimeMillis();
+        long start = System.currentTimeMillis();
         System.out.println(run(args));
-//        System.out.println("\n\nczas:" + (System.currentTimeMillis() - start));
+        System.out.println("\n\nczas:" + (System.currentTimeMillis() - start));
     }
 
     private static Deputies.DeputiesOptions parseOption = Deputies.DeputiesOptions.any;
