@@ -1,6 +1,7 @@
 import org.apache.commons.io.IOUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
@@ -31,9 +32,9 @@ class JsonParser {
             JSONObject jsonObject = new JSONObject(IOUtils.toString(in, "UTF-8"));
             putNameAndIdIntoMap(jsonObject, deputyByName);
 
-            Optional<String> linkToLast = Optional.ofNullable(getLinkToLast(jsonObject));
-            if (linkToLast.isPresent()) {
-                String linkBody = linkToLast.get();
+//            Optional<String> linkToLast = Optional.ofNullable(getLinkToLast(jsonObject));
+            if (jsonObject.getJSONObject("Links").has("last")) {
+                String linkBody = jsonObject.getJSONObject("Links").getString("last");
                 int last = getLastPage(linkBody);
                 List<String> links = new ArrayList<>();
                 for (int i = last; i > 1; i--) {
@@ -48,13 +49,13 @@ class JsonParser {
         }
     }
 
-    private static String getLinkToLast(JSONObject jsonObject) {
-        try {
-           return jsonObject.getJSONObject("Links").getString("last");
-        }catch (JSONException e){
-            return null;
-        }
-    }
+//    private static String getLinkToLast(JSONObject jsonObject) {
+//        try {
+//           return jsonObject.getJSONObject("Links").getString("last");
+//        }catch (JSONException e){
+//            return null;
+//        }
+//    }
 
     private static Stream<Map.Entry<String, Integer>> parsePages(String Url) throws UncheckedIOException {
         HashMap<String, Integer> deputies = new HashMap<>();
