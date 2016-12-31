@@ -4,7 +4,7 @@ import java.io.UncheckedIOException;
 /**
  * Created by bartek on 12/12/16.
  */
-public class DeputyBuilder {
+class DeputyBuilder {
 
     private static final String url = "https://api-v3.mojepanstwo.pl/dane/poslowie/";
 

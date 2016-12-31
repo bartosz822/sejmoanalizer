@@ -1,15 +1,14 @@
 import org.apache.commons.io.IOUtils;
-import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -32,7 +31,6 @@ class JsonParser {
             JSONObject jsonObject = new JSONObject(IOUtils.toString(in, "UTF-8"));
             putNameAndIdIntoMap(jsonObject, deputyByName);
 
-//            Optional<String> linkToLast = Optional.ofNullable(getLinkToLast(jsonObject));
             if (jsonObject.getJSONObject("Links").has("last")) {
                 String linkBody = jsonObject.getJSONObject("Links").getString("last");
                 int last = getLastPage(linkBody);
@@ -49,19 +47,12 @@ class JsonParser {
         }
     }
 
-//    private static String getLinkToLast(JSONObject jsonObject) {
-//        try {
-//           return jsonObject.getJSONObject("Links").getString("last");
-//        }catch (JSONException e){
-//            return null;
-//        }
-//    }
-
     private static Stream<Map.Entry<String, Integer>> parsePages(String Url) throws UncheckedIOException {
         HashMap<String, Integer> deputies = new HashMap<>();
         try (InputStream in =
                      new URL(Url).openStream()
         ) {
+            
             JSONObject jsonObject = new JSONObject(IOUtils.toString(in, "UTF-8"));
 
             putNameAndIdIntoMap(jsonObject, deputies);
@@ -83,7 +74,7 @@ class JsonParser {
 
     static List<Integer> getIDs(String Url) throws IOException, ExecutionException, InterruptedException {
         if (deputyByName.isEmpty()) parsemain(Url);
-        return new CopyOnWriteArrayList<>(deputyByName.values());
+        return new ArrayList<>(deputyByName.values());
     }
 
     //throws NumberFormatException if link doesn't end with nuber but it's kind of impossible pasend on the structure of the json string

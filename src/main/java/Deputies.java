@@ -19,7 +19,8 @@ class Deputies {
 
     Deputies(List<Integer> IDs, DeputiesOptions o) throws IOException, ExecutionException, InterruptedException {
 
-        LazyReact streamBuilder = new LazyReact(new ForkJoinPool(64));
+        LazyReact streamBuilder = new LazyReact(new ForkJoinPool(32));
+
 
         if (o.equals(DeputiesOptions.WithSpends))
             this.deputies = IDs.parallelStream().map(DeputyBuilder::buildWithSpends).collect(Collectors.toList());
@@ -27,7 +28,12 @@ class Deputies {
             this.deputies = IDs.parallelStream().map(DeputyBuilder::buildWithTrips).collect(Collectors.toList());
         else {
 //            this.deputies = IDs.parallelStream().parallel().map(DeputyBuilder::buildWithTripsAndSpends).collect(Collectors.toList());
-              this.deputies=streamBuilder.from(IDs).map(DeputyBuilder::buildWithTripsAndSpends).collect(Collectors.toList());
+              this.deputies=streamBuilder
+                      .from(IDs)
+                      .map(DeputyBuilder::buildWithTripsAndSpends)
+                      .toQueue()
+                      .stream()
+                      .collect(Collectors.toList());
         }
 
     }

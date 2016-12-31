@@ -14,9 +14,7 @@ import java.util.concurrent.ExecutionException;
 
 public class Runner {
 
-// TODO config file with links etc ?
-
-    public static long start;
+    private static long start;
 
     public static void main(String[] args) {
         start = System.currentTimeMillis();
@@ -27,20 +25,20 @@ public class Runner {
     private static Deputies.DeputiesOptions parseOption = Deputies.DeputiesOptions.any;
     private static Deputies deputies;
     private static Map<String, Integer> deputyByName;
-    private static final StringBuilder res = new StringBuilder();
+    private static StringBuilder res = new StringBuilder();
 
-    private static final String UrlDefault = "https://api-v3.mojepanstwo.pl/dane/poslowie.json";
-    private static final String UrlKad8 = "https://api-v3.mojepanstwo.pl/dane/poslowie.json?conditions[poslowie.kadencja]=8";
-    private static final String UrlKad7 = "https://api-v3.mojepanstwo.pl/dane/poslowie.json?conditions[poslowie.kadencja]=7";
-    private static final String prop1 = "java.util.concurrent.ForkJoinPool.common.parallelism";
-    private static final String threads = "50";
+    private static String UrlDefault = "https://api-v3.mojepanstwo.pl/dane/poslowie.json";
+    private static String UrlKad8 = "https://api-v3.mojepanstwo.pl/dane/poslowie.json?conditions[poslowie.kadencja]=8";
+    private static String UrlKad7 = "https://api-v3.mojepanstwo.pl/dane/poslowie.json?conditions[poslowie.kadencja]=7";
+    private static String prop1 = "java.util.concurrent.ForkJoinPool.common.parallelism";
+    private static String threads = "50";
 
 
     private static String run(String[] args) {
 
         System.setProperty(prop1, threads);
-        System.setProperty("http.keepalive", "true");
-        System.setProperty("http.maxConnections", "50");
+//        System.setProperty("http.keepalive", "true");
+//        System.setProperty("http.maxConnections", "50");
 
 
         Options options = OptionsCreator.create();
