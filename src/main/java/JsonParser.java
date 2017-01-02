@@ -38,11 +38,12 @@ class JsonParser {
                 for (int i = last; i > 1; i--) {
                     links.add(linkBody.substring(0, linkBody.length() - 2) + i);
                 }
-
-                deputyByName.putAll(links
-                        .parallelStream()
-                        .flatMap(JsonParser::parsePages)
-                        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (a1, a2) -> a1)));
+                deputyByName.putAll(
+                        Runner.streamBuilder
+                                .from(links)
+                                .parallel()
+                                .flatMap(JsonParser::parsePages)
+                                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (a1, a2) -> a1)));
             }
         }
     }
@@ -52,7 +53,7 @@ class JsonParser {
         try (InputStream in =
                      new URL(Url).openStream()
         ) {
-            
+
             JSONObject jsonObject = new JSONObject(IOUtils.toString(in, "UTF-8"));
 
             putNameAndIdIntoMap(jsonObject, deputies);
@@ -63,7 +64,7 @@ class JsonParser {
         return deputies.entrySet().stream();
     }
 
-    private static void putNameAndIdIntoMap(JSONObject jsonObject, Map<String, Integer> deputies){
+    private static void putNameAndIdIntoMap(JSONObject jsonObject, Map<String, Integer> deputies) {
         for (Object o : jsonObject.getJSONArray("Dataobject")) {
             JSONObject jsonO = (JSONObject) o;
             int id = jsonO.getInt("id");
@@ -77,7 +78,7 @@ class JsonParser {
         return new ArrayList<>(deputyByName.values());
     }
 
-    //throws NumberFormatException if link doesn't end with nuber but it's kind of impossible pasend on the structure of the json string
+    //throws NumberFormatException if link doesn't end with number but it's kind of impossible pasend on the structure of the json string
     private static int getLastPage(String link) {
         int i = link.length() - 1;
         StringBuilder number = new StringBuilder();

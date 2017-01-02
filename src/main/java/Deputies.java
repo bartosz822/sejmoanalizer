@@ -1,12 +1,10 @@
-import com.aol.cyclops.control.LazyReact;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ForkJoinPool;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 
@@ -19,27 +17,23 @@ class Deputies {
 
     Deputies(List<Integer> IDs, DeputiesOptions o) throws IOException, ExecutionException, InterruptedException {
 
-        LazyReact streamBuilder = new LazyReact(new ForkJoinPool(32));
-
+        Function<Integer,Deputy> buildfunction = DeputyBuilder::buildWithTripsAndSpends;
 
         if (o.equals(DeputiesOptions.WithSpends))
-            this.deputies = IDs.parallelStream().map(DeputyBuilder::buildWithSpends).collect(Collectors.toList());
+            buildfunction = DeputyBuilder::buildWithSpends;
         else if (o.equals(DeputiesOptions.WithTrips))
-            this.deputies = IDs.parallelStream().map(DeputyBuilder::buildWithTrips).collect(Collectors.toList());
-        else {
+            buildfunction = DeputyBuilder::buildWithTrips;
 //            this.deputies = IDs.parallelStream().parallel().map(DeputyBuilder::buildWithTripsAndSpends).collect(Collectors.toList());
-              this.deputies=streamBuilder
-                      .from(IDs)
-                      .map(DeputyBuilder::buildWithTripsAndSpends)
-                      .toQueue()
-                      .stream()
-                      .collect(Collectors.toList());
+            this.deputies = Runner.streamBuilder
+                    .from(IDs)
+                    .map(buildfunction)
+                    .toQueue()
+                    .stream()
+                    .collect(Collectors.toList());
         }
 
-    }
-
     double getAvgSpends() {
-        return deputies.parallelStream().collect(Collectors.summingDouble(Deputy::getSumOfSpends)) / deputies.size();
+        return deputies.parallelStream().mapToDouble(Deputy::getSumOfSpends).sum() / deputies.size();
     }
 
     String getMostTrip() {
@@ -55,10 +49,8 @@ class Deputies {
     }
 
     private String getNameOfMax(Comparator<Deputy> comparator) {
-        Optional<Deputy> deputy = deputies.stream().collect(Collectors.maxBy(comparator));
-        if (deputy.isPresent()) {
-            return deputy.get().getName();
-        } else return "";
+        Optional<Deputy> deputy = deputies.stream().max(comparator);
+        return deputy.map(Deputy::getName).orElse("");
     }
 
     String getVisitedItaly() {

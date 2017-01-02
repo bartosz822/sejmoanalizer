@@ -1,12 +1,13 @@
+import com.aol.cyclops.control.LazyReact;
 import org.apache.commons.cli.*;
 import org.json.JSONException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.UnknownHostException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ForkJoinPool;
 
 /**
  * Created by bartek on 12/12/16.
@@ -15,6 +16,7 @@ import java.util.concurrent.ExecutionException;
 public class Runner {
 
     private static long start;
+
 
     public static void main(String[] args) {
         start = System.currentTimeMillis();
@@ -30,15 +32,11 @@ public class Runner {
     private static String UrlDefault = "https://api-v3.mojepanstwo.pl/dane/poslowie.json";
     private static String UrlKad8 = "https://api-v3.mojepanstwo.pl/dane/poslowie.json?conditions[poslowie.kadencja]=8";
     private static String UrlKad7 = "https://api-v3.mojepanstwo.pl/dane/poslowie.json?conditions[poslowie.kadencja]=7";
-    private static String prop1 = "java.util.concurrent.ForkJoinPool.common.parallelism";
-    private static String threads = "50";
+    private static int threads = 64;
 
+    static LazyReact streamBuilder = new LazyReact(new ForkJoinPool(Runner.threads));
 
     private static String run(String[] args) {
-
-        System.setProperty(prop1, threads);
-//        System.setProperty("http.keepalive", "true");
-//        System.setProperty("http.maxConnections", "50");
 
 
         Options options = OptionsCreator.create();
