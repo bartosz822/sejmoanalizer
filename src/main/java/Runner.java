@@ -105,7 +105,7 @@ public class Runner {
                 res.append("Najwiecej podróży odbył:  ").append(deputies.getMostTrip()).append("\n");
                 break;
             case "najdluzej":
-                res.append("Najdłużej za granicą pozostawał:  ").append(deputies.getMostExpensive()).append("\n");
+                res.append("Najdłużej za granicą pozostawał:  ").append(deputies.getLongestTrip()).append("\n");
                 break;
             case "najdrozsza":
                 res.append("Najdroższą podróż odbył:  ").append(deputies.getMostExpensive()).append("\n");
@@ -116,7 +116,7 @@ public class Runner {
             case "all": {
                 res.append("Średnia wydatków:  ").append(deputies.getAvgSpends()).append("\n");
                 res.append("Najwiecej podróży odbył:  ").append(deputies.getMostTrip()).append("\n");
-                res.append("Najdłużej za granicą pozostawał:  ").append(deputies.getMostExpensive()).append("\n");
+                res.append("Najdłużej za granicą pozostawał:  ").append(deputies.getLongestTrip()).append("\n");
                 res.append("Najdroższą podróż odbył:  ").append(deputies.getMostExpensive()).append("\n");
                 res.append("We włoszech byli:  ").append(deputies.getVisitedItaly()).append("\n");
                 break;

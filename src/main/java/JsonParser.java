@@ -19,7 +19,7 @@ import java.util.stream.Stream;
 class JsonParser {
 
     private static final Map<String, Integer> deputyByName = new ConcurrentHashMap<>();
-
+//    private static final List<Integer> IDs = new ArrayList<>();
 
     private static void parsemain(String Url) throws IOException, ExecutionException, InterruptedException {
 
@@ -68,7 +68,11 @@ class JsonParser {
         for (Object o : jsonObject.getJSONArray("Dataobject")) {
             JSONObject jsonO = (JSONObject) o;
             int id = jsonO.getInt("id");
-            String name = jsonO.getJSONObject("data").getString("ludzie.nazwa");
+            String name = jsonO.getJSONObject("data").getString("poslowie.nazwa");
+//                    + " "
+//                    + jsonO.getJSONObject("data").getString("poslowie.imie_drugie")
+//                    + " "
+//                    + jsonO.getJSONObject("data").getString("poslowie.nazwisko");
             deputies.put(name, id);
         }
     }

@@ -23,7 +23,6 @@ class Deputies {
             buildfunction = DeputyBuilder::buildWithSpends;
         else if (o.equals(DeputiesOptions.WithTrips))
             buildfunction = DeputyBuilder::buildWithTrips;
-//            this.deputies = IDs.parallelStream().parallel().map(DeputyBuilder::buildWithTripsAndSpends).collect(Collectors.toList());
             this.deputies = Runner.streamBuilder
                     .from(IDs)
                     .map(buildfunction)
@@ -33,7 +32,8 @@ class Deputies {
         }
 
     double getAvgSpends() {
-        return deputies.parallelStream().mapToDouble(Deputy::getSumOfSpends).sum() / deputies.size();
+        double avgSum = deputies.parallelStream().mapToDouble(Deputy::getSumOfSpends).sum() / deputies.size();
+        return Math.round(avgSum * 100.0) / 100.0;
     }
 
     String getMostTrip() {
