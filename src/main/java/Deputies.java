@@ -17,19 +17,19 @@ class Deputies {
 
     Deputies(List<Integer> IDs, DeputiesOptions o) throws IOException, ExecutionException, InterruptedException {
 
-        Function<Integer,Deputy> buildfunction = DeputyBuilder::buildWithTripsAndSpends;
+        Function<Integer, Deputy> buildfunction = DeputyBuilder::buildWithTripsAndSpends;
 
         if (o.equals(DeputiesOptions.WithSpends))
             buildfunction = DeputyBuilder::buildWithSpends;
         else if (o.equals(DeputiesOptions.WithTrips))
             buildfunction = DeputyBuilder::buildWithTrips;
-            this.deputies = Runner.streamBuilder
-                    .from(IDs)
-                    .map(buildfunction)
-                    .toQueue()
-                    .stream()
-                    .collect(Collectors.toList());
-        }
+        this.deputies = Runner.streamBuilder
+                .from(IDs)
+                .map(buildfunction)
+                .toQueue()
+                .stream()
+                .collect(Collectors.toList());
+    }
 
     double getAvgSpends() {
         double avgSum = deputies.parallelStream().mapToDouble(Deputy::getSumOfSpends).sum() / deputies.size();

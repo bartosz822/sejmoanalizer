@@ -17,6 +17,7 @@ import java.util.stream.Stream;
 /**
  * Created by bartek on 12/11/16.
  */
+
 class JsonParser {
 
     private static final Map<String, Integer> deputyByName = new ConcurrentHashMap<>();
@@ -52,15 +53,12 @@ class JsonParser {
     }
 
     private static Stream<Map.Entry<String, Integer>> parsePages(String Url) throws UncheckedIOException {
-        HashMap<String, Integer> deputies = new HashMap<>();
-
+        Map <String, Integer> deputies = new ConcurrentHashMap<>();
         try (InputStream in =
                      new URL(Url).openStream()
         ) {
-
             JSONObject jsonObject = new JSONObject(IOUtils.toString(in, "UTF-8"));
             putNameAndIdIntoMap(jsonObject, deputies);
-
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }

@@ -30,4 +30,5 @@ jar {
     manifest {
         attributes 'Main-Class': 'Runner'
     }
+
 }
