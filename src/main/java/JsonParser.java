@@ -1,5 +1,6 @@
 import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
@@ -19,7 +20,6 @@ import java.util.stream.Stream;
 class JsonParser {
 
     private static final Map<String, Integer> deputyByName = new ConcurrentHashMap<>();
-//    private static final List<Integer> IDs = new ArrayList<>();
 
     private static void parsemain(String Url) throws IOException, ExecutionException, InterruptedException {
 
@@ -32,12 +32,15 @@ class JsonParser {
             putNameAndIdIntoMap(jsonObject, deputyByName);
 
             if (jsonObject.getJSONObject("Links").has("last")) {
+
                 String linkBody = jsonObject.getJSONObject("Links").getString("last");
                 int last = getLastPage(linkBody);
                 List<String> links = new ArrayList<>();
+
                 for (int i = last; i > 1; i--) {
                     links.add(linkBody.substring(0, linkBody.length() - 2) + i);
                 }
+
                 deputyByName.putAll(
                         Runner.streamBuilder
                                 .from(links)
@@ -50,17 +53,18 @@ class JsonParser {
 
     private static Stream<Map.Entry<String, Integer>> parsePages(String Url) throws UncheckedIOException {
         HashMap<String, Integer> deputies = new HashMap<>();
+
         try (InputStream in =
                      new URL(Url).openStream()
         ) {
 
             JSONObject jsonObject = new JSONObject(IOUtils.toString(in, "UTF-8"));
-
             putNameAndIdIntoMap(jsonObject, deputies);
 
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
+
         return deputies.entrySet().stream();
     }
 
@@ -69,10 +73,6 @@ class JsonParser {
             JSONObject jsonO = (JSONObject) o;
             int id = jsonO.getInt("id");
             String name = jsonO.getJSONObject("data").getString("poslowie.nazwa");
-//                    + " "
-//                    + jsonO.getJSONObject("data").getString("poslowie.imie_drugie")
-//                    + " "
-//                    + jsonO.getJSONObject("data").getString("poslowie.nazwisko");
             deputies.put(name, id);
         }
     }
@@ -82,7 +82,7 @@ class JsonParser {
         return new ArrayList<>(deputyByName.values());
     }
 
-    //throws NumberFormatException if link doesn't end with number but it's kind of impossible pasend on the structure of the json string
+    //throws NumberFormatException if link doesn't end with number but it's kind of impossible based on the structure of the json string
     private static int getLastPage(String link) {
         int i = link.length() - 1;
         StringBuilder number = new StringBuilder();

@@ -54,7 +54,11 @@ class Deputies {
     }
 
     String getVisitedItaly() {
-        return deputies.stream().filter(Deputy::visitedItaly).map(Deputy::getName).collect(Collectors.toList()).toString();
+        return deputies.stream()
+                .filter(Deputy::visitedItaly)
+                .map(Deputy::getName)
+                .collect(Collectors.toList())
+                .toString();
     }
 
     enum DeputiesOptions {

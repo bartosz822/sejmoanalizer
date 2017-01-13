@@ -88,6 +88,10 @@ class Deputy {
         return false;
     }
 
+    String getName() {
+        return body.getJSONObject("data").getString("ludzie.nazwa");
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -104,9 +108,6 @@ class Deputy {
         return ID;
     }
 
-    String getName() {
-        return body.getJSONObject("data").getString("ludzie.nazwa");
-    }
 
     static class DeputyMostTripsComparator implements Comparator<Deputy>{
         @Override

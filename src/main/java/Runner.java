@@ -9,20 +9,21 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
 
+import static java.util.concurrent.ForkJoinPool.defaultForkJoinWorkerThreadFactory;
+
 /**
  * Created by bartek on 12/12/16.
  */
 
 public class Runner {
 
-    private static long start;
-
-
     public static void main(String[] args) {
         start = System.currentTimeMillis();
         System.out.println(run(args));
         System.out.println("\n\nczas:" + (System.currentTimeMillis() - start));
     }
+
+    private static long start;
 
     private static Deputies.DeputiesOptions parseOption = Deputies.DeputiesOptions.any;
     private static Deputies deputies;
@@ -60,9 +61,10 @@ public class Runner {
             System.out.println("Host " + e.getMessage() + " nie odpowiada");
         } catch (MalformedURLException e){
             System.out.println("Prawdopodobnie coś jest nie tak z serwerem ");
-        }
-        catch (ParseException | IOException | ExecutionException | InterruptedException | IllegalArgumentException | JSONException e) {
+        } catch (ParseException | IOException | ExecutionException | InterruptedException | IllegalArgumentException | JSONException e) {
             System.out.println(e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Coś poszło strasznie nie tak");
         }
 
 
